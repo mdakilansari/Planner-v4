@@ -3,13 +3,13 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Triggers the workflow on push events to the main branch
+      - main 
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     
-    # Give the job necessary permissions to read/write to the repository
+    # Required permissions for GITHUB_TOKEN to push to the gh-pages branch
     permissions:
       contents: write 
       pages: write 
@@ -21,6 +21,26 @@ jobs:
 
       - name: 🛠️ Set up Node.js
         uses: actions/setup-node@v4
+        with:
+          node-version: '18' 
 
+      - name: 📥 Install dependencies
+        # Assuming you have a package.json in the root and another in the frontend folder.
+        # This will install root dependencies (like gh-pages)
+        run: npm ci
+        
+      - name: 📥 Install frontend dependencies
+        # This installs dependencies specifically for the React app
+        run: npm ci --prefix frontend 
 
+      - name: 🔨 Build project
+        # This runs the build script inside the frontend directory
+        run: npm run build --prefix frontend
 
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # 🎯 UPDATED PATH: Assumes the build output is in frontend/build
+          publish_dir: ./frontend/build 
+          publish_branch: gh-pages
