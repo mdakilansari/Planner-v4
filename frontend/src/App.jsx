@@ -6,7 +6,7 @@ import TaskList from './components/TaskList';
 import AddTaskModal from './components/AddTaskModal';
 import EditTaskDrawer from './components/EditTaskDrawer';
 import DeleteConfirmModal from './components/DeleteConfirmModal';
-import { useToast } from './hooks/useToast';
+import { useToast } from './hooks/useToast.jsx';
 import { PlusCircle } from 'lucide-react';
 import { fetchTasks, createTask, updateTask, deleteTask, completeTask, snoozeTaskReminder } from './api/tasks';
 
